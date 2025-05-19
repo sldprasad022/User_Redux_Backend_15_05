@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,25 @@ public class UserController
 	@Autowired
 	private UserService userService;
 	
+//	@PostMapping("/save")
+//	public ResponseEntity<UserDto> saveUser(@RequestParam String userName,@RequestParam String email,@RequestParam String mobileNumber,
+//										@RequestParam(required=false) String department,@RequestParam(required=false) Double salary,@RequestParam String password)
+//	{
+//		UserDto save = userService.saveUser(userName, email, mobileNumber, department, salary, password);
+//		return new ResponseEntity<UserDto>(save,HttpStatus.OK);
+//	}
+	
 	@PostMapping("/save")
-	public ResponseEntity<UserDto> saveUser(@RequestParam String userName,@RequestParam String email,@RequestParam String mobileNumber,
-										@RequestParam(required=false) String department,@RequestParam(required=false) Double salary,@RequestParam String password)
-	{
-		UserDto save = userService.saveUser(userName, email, mobileNumber, department, salary, password);
-		return new ResponseEntity<UserDto>(save,HttpStatus.OK);
+	public ResponseEntity<UserDto> saveUser(@RequestBody User user) {
+	    UserDto savedUser = userService.saveUser(
+	        user.getUserName(),
+	        user.getEmail(),
+	        user.getMobileNumber(),
+	        user.getDepartment(),
+	        user.getSalary(),
+	        user.getPassword()
+	    );
+	    return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
 	
 	
