@@ -1,6 +1,8 @@
 package com.techpixe.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.techpixe.dto.UpdateUserRequest;
 import com.techpixe.dto.UserDto;
 import com.techpixe.entity.User;
 import com.techpixe.service.UserService;
@@ -36,6 +39,26 @@ public class UserController
 //		return new ResponseEntity<UserDto>(save,HttpStatus.OK);
 //	}
 	
+	
+//	@PostMapping("/save")
+//	public ResponseEntity<Map<String, Object>> saveUser(@RequestBody User user) {
+//	    UserDto savedUser = userService.saveUser(
+//	        user.getUserName(),
+//	        user.getEmail(),
+//	        user.getMobileNumber(),
+//	        user.getDepartment(),
+//	        user.getSalary(),
+//	        user.getPassword()
+//	    );
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("message", "User created successfully");
+//	    response.put("user", savedUser);
+//
+//	    return new ResponseEntity<>(response, HttpStatus.OK);
+//	}
+
+	
 	@PostMapping("/save")
 	public ResponseEntity<UserDto> saveUser(@RequestBody User user) {
 	    UserDto savedUser = userService.saveUser(
@@ -46,6 +69,7 @@ public class UserController
 	        user.getSalary(),
 	        user.getPassword()
 	    );
+	    System.err.println("dcdcdccdc");
 	    return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
 	
@@ -64,6 +88,16 @@ public class UserController
 		return new ResponseEntity<List<User>>(fetchedAllUsers,HttpStatus.OK);
 	}
 	
+//	@GetMapping("/fetchAll")
+//	public ResponseEntity<Map<String, Object>> fetchAllUsers() {
+//	    List<User> users =  userService.fetchAllUsers();
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("users", users);
+//	    response.put("message", users.isEmpty() ? "No users found" : "Users fetched successfully");
+//	    return ResponseEntity.ok(response);
+//	}
+
+	
 	
 	@PutMapping("/update/{userId}")
 	public ResponseEntity<User> updateUserId(@PathVariable Long userId,@RequestParam(required=false) String userName,@RequestParam(required = false) String email,@RequestParam(required=false) String mobileNumber,@RequestParam(required=false) String department,@RequestParam(required=false) Double salary)
@@ -73,22 +107,51 @@ public class UserController
 		//return updatedUser.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 	
-	@DeleteMapping("/deleteByUserId/{userId}")
-	public ResponseEntity<Void> deleteById(@PathVariable Long userId)
-	{
-		User userFound = userService.fetchByUserId(userId);
-		if (userFound!=null)
-		{
-			System.err.println("User Deleted");
-			userService.deleteByUserId(userId);
-			return new  ResponseEntity<>(HttpStatus.OK);
-		} 
-		else 
-		{
-			System.err.println("****UserController Delete method if the UserId was not Found****");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+//	@PutMapping("/update/{userId}")
+//	public ResponseEntity<User> updateUserById(
+//	    @PathVariable Long userId,
+//	    @RequestBody UpdateUserRequest request
+//	) {
+//	    Optional<User> updatedUser = userService.updateUserById(
+//	        userId,
+//	        request.getUserName(),
+//	        request.getEmail(),
+//	        request.getMobileNumber(),
+//	        request.getDepartment(),
+//	        request.getSalary()
+//	    );
+//
+//	    return updatedUser.map(ResponseEntity::ok)
+//	                      .orElse(ResponseEntity.notFound().build());
+//	}
+
+	
+	//delete Model -1st
+//	@DeleteMapping("/deleteByUserId/{userId}")
+//	public ResponseEntity<Void> deleteById(@PathVariable Long userId)
+//	{
+//		User userFound = userService.fetchByUserId(userId);
+//		if (userFound!=null)
+//		{
+//			System.err.println("User Deleted");
+//			userService.deleteByUserId(userId);
+//			return new  ResponseEntity<>(HttpStatus.OK);
+//		} 
+//		else 
+//		{
+//			System.err.println("****UserController Delete method if the UserId was not Found****");
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		}
+//	}
+	
+	
+	//delete Model -2nd
+	@DeleteMapping("deleteByUserId/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+	    userService.deleteByUserId(id);
+	    return ResponseEntity.noContent().build();
 	}
+
 	
 	
 	//-----------------------------------------------------------------------

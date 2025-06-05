@@ -24,13 +24,17 @@ public class UserServiceImpl implements UserService
 	public UserDto saveUser(String userName, String email,String mobileNumber,String department,Double salary,String password) 					  
 	{
 		
-		User existingEmail = userRepository.findByEmail(email);
+//		User existingEmail = userRepository.findByEmail(email);
+//		
+//		if (existingEmail!=null)
+//		{
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Email already Exists");
+//		}
 		
-		if (existingEmail!=null)
-		{
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Email already Exists");
+		if (userRepository.existsByEmail(email)) {
+		    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
 		}
-		
+
 		
 		User user = new User();
 		user.setUserName(userName);
@@ -61,21 +65,24 @@ public class UserServiceImpl implements UserService
 	public List<User> fetchAllUsers()
 	{
 		List<User> fetchAll = userRepository.findAll();
-		if (fetchAll.isEmpty())
-		{
-			throw new ResponseStatusException(HttpStatus.OK,"No Records Found");
-		}
 		return fetchAll;
 	}
 	
 	
 	
 	
-
+	//model-1 delete
+//	@Override
+//	public void deleteByUserId(Long userId) 
+//	{
+//		userRepository.deleteById(userId);
+//	}
+	
+	//model-2 delete
 	@Override
-	public void deleteByUserId(Long userId) 
-	{
-		userRepository.deleteById(userId);
+	public void deleteByUserId(Long id) {
+	    User user = fetchByUserId(id); 
+	    userRepository.delete(user);
 	}
 	
 	@Override
@@ -93,6 +100,20 @@ public class UserServiceImpl implements UserService
 		});
 	}
 	
+	
+//	@Override
+//	public Optional<User> updateUserById(Long userId, String userName, String email, String mobileNumber, String department, Double salary) {
+//	    return userRepository.findById(userId).map(existingUser -> {
+//	        if (userName != null) existingUser.setUserName(userName);
+//	        if (email != null) existingUser.setEmail(email);
+//	        if (mobileNumber != null) existingUser.setMobileNumber(mobileNumber);
+//	        if (department != null) existingUser.setDepartment(department);
+//	        if (salary != null) existingUser.setSalary(salary);
+//
+//	        return userRepository.save(existingUser);
+//	    });
+//	}
+
 	
 //-------------------------------------------------------------------------------------------------	
 	
